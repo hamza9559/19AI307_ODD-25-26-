@@ -1,18 +1,18 @@
-# Ex.No:4(D) DESIGN PATTERN  ---- BEHAVIOUR PATTERN
+# Ex.No:5(A) INPUTSTREAMREADER 
 
 ## QUESTION:
-Create an Article class where changes to the content are saved as mementos. Let the user view and restore any saved version.
+Write a Java program to create a new file and write user-provided content into it.
 
 ## AIM:
-To implement the Memento Pattern for an Article, allowing saving, viewing, and restoring previous versions of its content.
+To create a new file and write user-provided content into it using Java I/O classes.
 
 ## ALGORITHM :
-1.	Start the program and create an Article object and an ArticleHistory manager.
-2. Read the number of versions to save and the content for each version from the user.
-3. Set the content of the article and save each version as a memento in ArticleHistory.
-4. Read the index of the version to restore.
-5. Retrieve the corresponding memento and restore the article’s content.
-6. Display the restored content or show a message if the version index is invalid.
+1.	Start the program and create a Scanner object to read input from the user.
+2. Read the file name and the content to be written.
+3. Create a File object with the given file name.
+4. Check if the file already exists; if not, create a new file.
+5. Use FileWriter to write the user-provided content into the file.
+6. Close the writer and display a success message or handle exceptions if any occur.
 
 
 
@@ -21,7 +21,7 @@ To implement the Memento Pattern for an Article, allowing saving, viewing, and r
 ## PROGRAM:
  ```
 /*
-Program to implement a Behaviour Pattern using Java
+Program to implement a InputStreamReader using Java
 Developed by: HAMZA FAROOQUE
 RegisterNumber:  212223040054
 */
@@ -29,75 +29,36 @@ RegisterNumber:  212223040054
 
 ## SOURCE CODE:
 ```JAVA
-import java.util.*;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+import java.io.File;
 
-class Article {
-    private String content;
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public ArticleMemento save() {
-        return new ArticleMemento(content);
-    }
-
-    public void restore(ArticleMemento memento) {
-        this.content = memento.getContent();
-    }
-}
-
-class ArticleMemento {
-    private final String content;
-
-    public ArticleMemento(String content) {
-        this.content = content;
-    }
-
-    public String getContent() {
-        return content;
-    }
-}
-
-class ArticleHistory {
-    private List<ArticleMemento> versions = new ArrayList<>();
-
-    public void saveVersion(Article article) {
-        versions.add(article.save());
-    }
-
-    public ArticleMemento getVersion(int index) {
-        if (index >= 0 && index < versions.size()) {
-            return versions.get(index);
-        }
-        return null;
-    }
-}
-
-public class ArticleManager {
+public class CreateAndWriteFile {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Article article = new Article();
-        ArticleHistory history = new ArticleHistory();
 
-        int n = Integer.parseInt(sc.nextLine());
-        for (int i = 0; i < n; i++) {
-            String content = sc.nextLine();
-            article.setContent(content);
-            history.saveVersion(article);
-        }
+        String fileName = sc.nextLine();
+        String content = sc.nextLine();
 
-        int restoreIndex = Integer.parseInt(sc.nextLine());
-        ArticleMemento m = history.getVersion(restoreIndex);
-        if (m != null) {
-            article.restore(m);
-            System.out.println(article.getContent());
-        } else {
-            System.out.println("Invalid version");
+        try {
+            File file = new File(fileName);
+
+            if (file.createNewFile()) {
+                System.out.println("File created: " + file.getName());
+            } else {
+                System.out.println("File already exists. Writing content...");
+            }
+
+            FileWriter writer = new FileWriter(file);
+            writer.write(content);
+            writer.close();
+
+            System.out.println("Content written to the file successfully.");
+
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
         }
 
         sc.close();
@@ -112,9 +73,9 @@ public class ArticleManager {
 
 ## OUTPUT:
 
+<img width="1214" height="440" alt="image" src="https://github.com/user-attachments/assets/5a82c95e-1053-4ce4-ab1e-fc0a000ef1ee" />
 
-<img width="1212" height="639" alt="image" src="https://github.com/user-attachments/assets/dd5cafa0-fdc3-4871-b98a-07fc9849d5b6" />
 
 
 ## RESULT:
-The program executed successfully and allowed the user to save multiple versions of an article and restore any previous version using the Memento Pattern.
+The program executed successfully and created a new file (or used an existing one) and wrote the provided content into it.
